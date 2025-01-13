@@ -1,4 +1,4 @@
-using CleanAPIPJ.Domain.Entitiesว
+using CleanAPIPJ.Domain.Entities;
 using CleanAPIPJ.Domain.Interfaces;
 
 namespace CleanAPIPJ.Application.Services
