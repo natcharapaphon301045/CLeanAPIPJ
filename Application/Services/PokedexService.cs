@@ -1,50 +1,21 @@
-using MyProject.Domain.Entities;
-using System.Collections.Generic;
-using System.Linq;
+using CleanAPIPJ.Domain.Entitiesว
+using CleanAPIPJ.Domain.Interfaces;
 
-namespace MyProject.Application.Services
+namespace CleanAPIPJ.Application.Services
 {
     public class PokedexService
     {
-        private readonly List<Pokedex> _pokedexList = new List<Pokedex>();
+        private readonly IPokedexRepository _repository;
 
-        // Create: Add a new Pokémon to the list
-        public void CreatePokemon(Pokedex pokemon)
+        public PokedexService(IPokedexRepository repository)
         {
-            _pokedexList.Add(pokemon);
+            _repository = repository;
         }
 
-        // Read: Get Pokémon by ID
-        public Pokedex GetPokemonById(int pokemonID)
-        {
-            return _pokedexList.FirstOrDefault(p => p.PokemonID == pokemonID);
-        }
-
-        // Update: Modify an existing Pokémon's details
-        public void UpdatePokemon(Pokedex pokemon)
-        {
-            var existingPokemon = _pokedexList.FirstOrDefault(p => p.PokemonID == pokemon.PokemonID);
-            if (existingPokemon != null)
-            {
-                existingPokemon.PokemonName = pokemon.PokemonName;
-                existingPokemon.PokemonDescription = pokemon.PokemonDescription;
-            }
-        }
-
-        // Delete: Remove a Pokémon by ID
-        public void DeletePokemon(int pokemonID)
-        {
-            var pokemon = _pokedexList.FirstOrDefault(p => p.PokemonID == pokemonID);
-            if (pokemon != null)
-            {
-                _pokedexList.Remove(pokemon);
-            }
-        }
-
-        // List all Pokémon
-        public List<Pokedex> GetAllPokemons()
-        {
-            return _pokedexList;
-        }
+        public void CreatePokemon(Pokedex pokemon) => _repository.Add(pokemon);
+        public Pokedex GetPokemonById(int id) => _repository.GetById(id);
+        public void UpdatePokemon(Pokedex pokemon) => _repository.Update(pokemon);
+        public void DeletePokemon(int id) => _repository.Remove(id);
+        public List<Pokedex> GetAllPokemons() => _repository.GetAll();
     }
 }
