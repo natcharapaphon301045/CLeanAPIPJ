@@ -1,4 +1,4 @@
-
+using CleanAPIPJ.Domain.Entities;
 
 namespace CleanAPIPJ.Domain.Interfaces
 {
