@@ -1,0 +1,13 @@
+public class Pokedex{//for present week2
+    public int PokemonID {get; set;}
+    public string PokemonName {get; set;}
+    public string PokemonDescription {get; set;}
+
+ // Constructor
+ public Pokedex(int pokemonID, string pokemonName, string pokemonDescription)
+    {
+        PokemonID = pokemonID;
+        PokemonName = pokemonName;
+        PokemonDescription = pokemonDescription;
+    }
+}
