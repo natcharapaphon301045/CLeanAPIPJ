@@ -1,0 +1,6 @@
+@CleanAPIPJ_HostAddress = http://localhost:5016
+
+GET {{CleanAPIPJ_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
