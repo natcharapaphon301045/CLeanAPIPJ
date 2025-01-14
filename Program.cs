@@ -23,9 +23,12 @@ var app = builder.Build();
 // Get a specific Pokemon by ID
 app.MapGet("/api/pokemon/{id}", (int id, PokedexService service) =>
 {
-    var pokemon = service.GetPokemonById(id);
-    return pokemon is not null ? Results.Ok(pokemon) : Results.NotFound();
+    var pokemon = service.GetPokemonById(id); // เรียกใช้ service
+    return pokemon is not null 
+        ? Results.Ok(pokemon) // หากพบ Pokémon จะคืนค่าด้วย 200 OK พร้อมข้อมูล
+        : Results.NotFound(pokemon); // หากไม่พบ Pokémon จะคืนค่าด้วย 404 Not Found พร้อมข้อความ
 });
+
 
 // Create a new Pokemon
 app.MapPost("/api/pokemon", (Pokedex pokemon, PokedexService service) =>
