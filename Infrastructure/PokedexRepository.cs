@@ -17,32 +17,32 @@ namespace CleanAPIPJ.Infrastructure.Repositories
         }
 
         // เพิ่ม Pokemon ใหม่
-        public void Add(Pokedex pokemon)
+        public void Add(Pokedex pokedex)
         {
-            _context.Pokemons.Add(pokemon); // เพิ่ม Pokemon ลงใน DbSet
+            _context.Pokedex.Add(pokedex); // เพิ่ม Pokemon ลงใน DbSet
             _context.SaveChanges(); // บันทึกการเปลี่ยนแปลงลงในฐานข้อมูล
         }
 
         // ค้นหาหมายเลข Pokemon โดยใช้ ID
         public Pokedex GetById(int id)
         {
-            return _context.Pokemons.FirstOrDefault(p => p.PokemonID == id);
+            return _context.Pokedex.FirstOrDefault(p => p.PokemonID == id);
         }
 
         // อัปเดตข้อมูล Pokemon
         public void Update(Pokedex pokemon)
         {
-            _context.Pokemons.Update(pokemon); // อัปเดตข้อมูลใน DbSet
+            _context.Pokedex.Update(pokemon); // อัปเดตข้อมูลใน DbSet
             _context.SaveChanges(); // บันทึกการเปลี่ยนแปลง
         }
 
         // ลบ Pokemon ตาม ID
         public void Remove(int id)
         {
-            var pokemon = _context.Pokemons.Find(id); // ค้นหา Pokemon จาก ID
+            var pokemon = _context.Pokedex.Find(id); // ค้นหา Pokemon จาก ID
             if (pokemon != null)
             {
-                _context.Pokemons.Remove(pokemon); // ลบ Pokemon
+                _context.Pokedex.Remove(pokemon); // ลบ Pokemon
                 _context.SaveChanges(); // บันทึกการเปลี่ยนแปลง
             }
         }
@@ -50,7 +50,7 @@ namespace CleanAPIPJ.Infrastructure.Repositories
         // ดึงรายการ Pokemon ทั้งหมด
         public List<Pokedex> GetAll()
         {
-            return _context.Pokemons.ToList(); // ดึงข้อมูลทั้งหมดจาก DbSet
+            return _context.Pokedex.ToList(); // ดึงข้อมูลทั้งหมดจาก DbSet
         }
     }
 }

@@ -13,8 +13,8 @@ builder.Services.AddDbContext<PokemonDbContext>(options =>
 
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSingleton<IPokedexRepository, PokedexRepository>(); // Register Repository
-builder.Services.AddSingleton<PokedexService>(); // Register Service
+builder.Services.AddScoped<IPokedexRepository, PokedexRepository>(); // Register Repository
+builder.Services.AddScoped<PokedexService>(); // Register Service
 
 var app = builder.Build();
 
