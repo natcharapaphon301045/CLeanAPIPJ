@@ -1,6 +1,0 @@
-Public class Character//For Dnd
-{
-    public int Char_ID {get; set;}
-    public string Char_Name {get; set;}
-
-}

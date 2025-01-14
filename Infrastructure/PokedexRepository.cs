@@ -25,8 +25,11 @@ namespace CleanAPIPJ.Infrastructure.Repositories
 
         // ค้นหาหมายเลข Pokemon โดยใช้ ID
         public Pokedex GetById(int id)
-        {
-            return _context.Pokedex.FirstOrDefault(p => p.PokemonID == id);
+        {   var pokedex = _context.Pokedex.FirstOrDefault(p => p.PokemonID == id);
+            if(pokedex == null){
+                throw new Exception("ไม่เจออะ");
+            }
+            return pokedex;
         }
 
         // อัปเดตข้อมูล Pokemon
