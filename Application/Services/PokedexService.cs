@@ -22,17 +22,27 @@ namespace CleanAPIPJ.Application.Services
         public void DeletePokemon(int id) => _repository.Remove(id);
         public List<object> GetAllPokemons()
         {
-            return _dbContext.Pokedex
+            // ดึงข้อมูล Pokémon
+            var pokemons = _dbContext.Pokedex
                 .Include(p => p.PokemonType) // Include PokemonTypeRelation
                 .ThenInclude(pt => pt.PokemonType) // Include PokemonType เพื่อเข้าถึง TypeName
                 .Select(p => new
-                {
-                    PokemonID = p.PokemonID,
-                    PokemonName = p.PokemonName,
-                    PokemonDescription = p.PokemonDescription,
-                    PokemonType = p.PokemonType.Select(pt => pt.PokemonType.TypeName) // ดึง TypeName จาก PokemonType
-                })
-                .ToList<object>();
+            {
+                PokemonID = p.PokemonID,
+                PokemonName = p.PokemonName,
+                PokemonDescription = p.PokemonDescription,
+                PokemonType = p.PokemonType.Select(pt => pt.PokemonType.TypeName) // ดึง TypeName จาก PokemonType
+            })
+            .ToList<object>();
+
+            // ตรวจสอบว่าไม่มีข้อมูล Pokémon หรือไม่
+            if (pokemons.Count == 0)
+            {
+                // ถ้าไม่มีข้อมูล Pokémon ให้แสดงข้อความ "ไม่มีข้อมูลจ้าา"
+                return new List<object> { "ไม่มีข้อมูลจ้าา" };
+            }
+            // ถ้ามีข้อมูล Pokémon ให้คืนค่าตามปกติ
+            return pokemons;
         }
     }
 }
