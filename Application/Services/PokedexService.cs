@@ -25,17 +25,8 @@ namespace CleanAPIPJ.Application.Services
         {
             return new { message = "PokemonID นี้มีอยู่แล้วในระบบ" };
         }
-
-        // ตรวจสอบว่า TypeID ทั้งหมดมีอยู่ในระบบหรือไม่
-        var invalidTypeIds = typeIds.Where(typeId => _dbContext.PokemonType.Find(typeId) == null).ToList();
-        if (invalidTypeIds.Any())
-        {
-            return new { message = "TypeID เหล่านี้ไม่มีในระบบ", invalidTypeIds };
-        }
-
         // เพิ่ม Pokémon และความสัมพันธ์
         _repository.AddWithTypes(pokemon, typeIds);
-
         return new { message = "เพิ่มข้อมูลสำเร็จ", pokemon };
     }
 /*------------------------------------UPDATE---------------------------------------------------*/
