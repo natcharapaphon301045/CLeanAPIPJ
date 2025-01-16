@@ -12,7 +12,7 @@ namespace CleanAPIPJ.Infrastructure.Repositories
         {
             _context = context;
         }
-/*-----------------------------------------------------------------*/
+/*--------------------------POST---------------------------------------*/
         // เพิ่ม Pokemon ใหม่
         public void AddWithTypes(Pokedex pokemon, List<int> typeIds)
         {
@@ -51,23 +51,21 @@ namespace CleanAPIPJ.Infrastructure.Repositories
             // บันทึกข้อมูลทั้งหมดลงในฐานข้อมูล
             _context.SaveChanges();
         }
-
-
-
+/*------------------------------Get by id ------------------------------------------------*/
         // ค้นหาหมายเลข Pokemon โดยใช้ ID
         public Pokedex? GetById(int id)
         {
             return _context.Pokedex.FirstOrDefault(p => p.PokemonID == id);
         }
 
-
+/*---------------------------put ---------------------------------------*/
         // อัปเดตข้อมูล Pokemon
         public void Update(Pokedex pokemon)
         {
             _context.Pokedex.Update(pokemon); // อัปเดตข้อมูลใน DbSet
             _context.SaveChanges(); // บันทึกการเปลี่ยนแปลง
         }
-
+/*----------------------------------delete--------------------------------*/
         // ลบ Pokemon ตาม ID
         public void Remove(int id)
         {
@@ -78,7 +76,7 @@ namespace CleanAPIPJ.Infrastructure.Repositories
                 _context.SaveChanges(); // บันทึกการเปลี่ยนแปลง
             }
         }
-
+/*-------------------------------------------get all----------------------------------------*/
         // ดึงรายการ Pokemon ทั้งหมด
         public List<Pokedex> GetAll()
         {
