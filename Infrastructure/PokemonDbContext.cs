@@ -33,13 +33,18 @@ namespace CleanAPIPJ.Infrastructure
             modelBuilder.Entity<PokemonTypeRelation>()
                 .HasKey(ptr => new { ptr.PokemonID, ptr.TypeID });
 
-            modelBuilder.Entity<PokemonTypeRelation>();
-                modelBuilder.Entity<PokemonTypeRelation>()
+            modelBuilder.Entity<PokemonTypeRelation>()
                 .HasOne(ptr => ptr.Pokedex)
                 .WithMany(p => p.PokemonType)
                 .HasForeignKey(ptr => ptr.PokemonID)
                 .OnDelete(DeleteBehavior.Cascade);
 
+        /*modelBuilder.Entity<PokemonTypeRelation>()
+            .HasOne(ptr => ptr.Pokedex) // เชื่อมโยงกับ Pokedex
+            .WithMany(p => p.PokemonTypeRelations) // Pokedex สามารถมีหลาย PokemonTypeRelations
+            .HasForeignKey(ptr => ptr.PokemonID) // ใช้ PokemonID เป็น foreign key
+            .OnDelete(DeleteBehavior.Cascade); // กำหนดให้ลบ PokemonTypeRelation เมื่อ Pokedex ถูกลบ
+*/
         }
     }
 }
