@@ -11,6 +11,7 @@ public class PokemonType
     public ICollection<PokemonTypeRelation> PokemonRelation { get; set; }
     public PokemonType(string typeName)
     {
+
         TypeName = typeName;
         PokemonRelation = new List<PokemonTypeRelation>(); // เริ่มต้นคอลเลกชัน
     }

@@ -4,6 +4,7 @@ using CleanAPIPJ.Domain.Interfaces;
 using CleanAPIPJ.Infrastructure;
 using CleanAPIPJ.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using CleanAPIPJ.Application.Requests;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,23 +32,41 @@ app.MapGet("/api/pokemon/{id}", (int id, PokedexService service) =>
 
 
 // Create a new Pokemon
-app.MapPost("/api/pokemon", (Pokedex pokemon, PokedexService service) =>
+// POST: /api/pokemon - Create a new Pokemon
+app.MapPost("/api/pokemon", (CreatePokemonRequest request, PokedexService service) =>
 {
-    service.CreatePokemon(pokemon);
-    return Results.Created($"/api/pokemon/{pokemon.PokemonID}", pokemon);
+    try
+    {
+        // ตรวจสอบว่า PokemonID ซ้ำหรือไม่
+        var existingPokemon = service.GetPokemonById(request.PokemonID); 
+
+        // แปลง CreatePokemonRequest เป็น Pokedex
+        var pokemon = new Pokedex(request.PokemonID, request.PokemonName, request.PokemonDescription);
+
+        // ส่ง typeIds ไปด้วย
+        var result = service.CreatePokemon(pokemon, request.TypeIds);
+
+        return Results.Created($"/api/pokemon/{pokemon.PokemonID}", result);
+    }
+    catch (Exception ex)
+    {
+        return Results.BadRequest(ex.Message); // ส่งกลับข้อความผิดพลาดหากเกิดข้อผิดพลาด
+    }
 });
+
+
 
 // Update an existing Pokemon
 app.MapPut("/api/pokemon", (Pokedex pokemon, PokedexService service) =>
 {
-    service.UpdatePokemon(pokemon);
+    service.Update(pokemon);
     return Results.NoContent();
 });
 
 // Delete a Pokemon by ID
 app.MapDelete("/api/pokemon/{id}", (int id, PokedexService service) =>
 {
-    service.DeletePokemon(id);
+    service.Delete(id);
     return Results.NoContent();
 });
 

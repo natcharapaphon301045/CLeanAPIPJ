@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CleanAPIPJ")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3d70ed27a65ffba9a20887350cb3c213fc3ea164")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+73b6815545a2bf55726a5b8684246c33708d45fb")]
 [assembly: System.Reflection.AssemblyProductAttribute("CleanAPIPJ")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CleanAPIPJ")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

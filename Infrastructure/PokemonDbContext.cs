@@ -16,6 +16,7 @@ namespace CleanAPIPJ.Infrastructure
             Pokedex = Set<Pokedex>();
             PokemonType = Set<PokemonType>();
             PokemonTypeRelations = Set<PokemonTypeRelation>();
+
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,12 +36,14 @@ namespace CleanAPIPJ.Infrastructure
             modelBuilder.Entity<PokemonTypeRelation>()
                 .HasOne(ptr => ptr.Pokedex)
                 .WithMany(p => p.PokemonType)
-                .HasForeignKey(ptr => ptr.PokemonID);
+                .HasForeignKey(ptr => ptr.PokemonID)
+                .OnDelete(DeleteBehavior.Cascade); // ตั้งค่าการลบ
 
             modelBuilder.Entity<PokemonTypeRelation>()
                 .HasOne(ptr => ptr.PokemonType)
                 .WithMany(pt => pt.PokemonRelation)
-                .HasForeignKey(ptr => ptr.TypeID);
+                .HasForeignKey(ptr => ptr.TypeID)
+                .OnDelete(DeleteBehavior.Cascade); // ตั้งค่าการลบ
         }
     }
 }

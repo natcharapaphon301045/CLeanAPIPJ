@@ -2,7 +2,7 @@ using CleanAPIPJ.Domain.Entities;
 using CleanAPIPJ.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using CleanAPIPJ.Infrastructure;
-using Microsoft.AspNetCore.Http.HttpResults;
+
 
 namespace CleanAPIPJ.Application.Services
 {
@@ -16,30 +16,43 @@ namespace CleanAPIPJ.Application.Services
             _repository = repository;
             _dbContext = dbContext;
         }
-
-        public void CreatePokemon(Pokedex pokemon) => _repository.Add(pokemon);
-        public object GetPokemonById(int id) 
+/*------------------------------------------------API POST-----------------------------------------------------*/  
+   public object CreatePokemon(Pokedex pokemon, List<int> typeIds)
+    {
+        // ตรวจสอบว่า PokemonID ซ้ำหรือไม่
+        var existingPokemon = _repository.GetById(pokemon.PokemonID);
+        if (existingPokemon != null)
         {
-            var pokemon = _dbContext.Pokedex
-            .Where(p => p.PokemonID == id)
-            .Include(p => p.PokemonType)
-            .ThenInclude( pt => pt.PokemonType)
-            .Select(p=> new{
-                PokemonId = p.PokemonID,
-                PokemonName = p.PokemonName,
-                PokemonDescription = p.PokemonDescription,
-                PokemonType = p.PokemonType.Select(pt => pt.PokemonType.TypeName)
-            })
-            .FirstOrDefault();
-             if (pokemon == null)
-                {
-                    return (new { message = "หาไม่เจอจ้า" });  // คืนค่า null เมื่อไม่พบ Pokémon
-                }
-                return pokemon; 
+            return new { message = "PokemonID นี้มีอยู่แล้วในระบบ" };
         }
-        
-        public void UpdatePokemon(Pokedex pokemon) => _repository.Update(pokemon);
-        public void DeletePokemon(int id) => _repository.Remove(id);
+
+        // ตรวจสอบว่า TypeID ทั้งหมดมีอยู่ในระบบหรือไม่
+        var invalidTypeIds = typeIds.Where(typeId => _dbContext.PokemonType.Find(typeId) == null).ToList();
+        if (invalidTypeIds.Any())
+        {
+            return new { message = "TypeID เหล่านี้ไม่มีในระบบ", invalidTypeIds };
+        }
+
+        // เพิ่ม Pokémon และความสัมพันธ์
+        _repository.AddWithTypes(pokemon, typeIds);
+
+        return new { message = "เพิ่มข้อมูลสำเร็จ", pokemon };
+    }
+/*------------------------------------UPDATE---------------------------------------------------*/
+        public void Update(Pokedex pokemon) => _repository.Update(pokemon);
+/*-----------------------------------DELETE----------------------------------------------------*/
+        public void Delete(int id)
+        {
+            var pokemon = _dbContext.Pokedex.Find(id);
+            if (pokemon == null)
+            {
+                throw new KeyNotFoundException($"ไม่พบ Pokémon ที่จะลบ ด้วย ID {id}");
+            }
+
+            _dbContext.Pokedex.Remove(pokemon); // ลบ Pokemon
+            _dbContext.SaveChanges(); // บันทึกการเปลี่ยนแปลง
+        }
+/*--------------------------------------GET-------------------------------------------------*/
         public List<object> GetAllPokemons()
         {
             // ดึงข้อมูล Pokémon
@@ -63,6 +76,26 @@ namespace CleanAPIPJ.Application.Services
             }
             // ถ้ามีข้อมูล Pokémon ให้คืนค่าตามปกติ
             return pokemons;
+        }
+/*---------------------------GET by id------------------------------------------------------------*/
+        public object GetPokemonById(int id) 
+        {
+            var pokemon = _dbContext.Pokedex
+            .Where(p => p.PokemonID == id)
+            .Include(p => p.PokemonType)
+            .ThenInclude( pt => pt.PokemonType)
+            .Select(p=> new{
+                PokemonID = p.PokemonID,
+                PokemonName = p.PokemonName,
+                PokemonDescription = p.PokemonDescription,
+                PokemonType = p.PokemonType.Select(pt => pt.PokemonType.TypeName)
+            })
+            .FirstOrDefault();
+             if (pokemon == null)
+                {
+                    return Results.NotFound(new { message = "หาไม่เจอจ้า" });  // คืนค่า null เมื่อไม่พบ Pokémon
+                }
+                return pokemon; 
         }
     }
 }
